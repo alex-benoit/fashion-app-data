@@ -16,19 +16,19 @@ ActiveRecord::Schema.define(version: 20161027160720) do
   enable_extension "plpgsql"
 
   create_table "items", force: :cascade do |t|
-    t.string   "name"
+    t.string   "full_name"
     t.string   "brand"
     t.integer  "sku"
-    t.integer  "int_product_code"
+    t.integer  "product_code"
+    t.boolean  "in_stock"
     t.text     "details"
-    t.text     "size"
+    t.text     "sizes"
     t.string   "color"
-    t.float    "price_gbp"
-    t.float    "price_eur"
-    t.string   "washing"
+    t.float    "price"
+    t.string   "washing_instructions"
     t.string   "materials"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
   end
 
   create_table "users", force: :cascade do |t|
