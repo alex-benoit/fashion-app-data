@@ -3,7 +3,7 @@ namespace :items do
   task update_all: :environment do
     items = Item.all
     items.each do |user|
-      UpdateItemsJob.perform_later(user.id)
+      UpdateItemsJob.perform_now(user.id)
       sleep 10
     end
   end
