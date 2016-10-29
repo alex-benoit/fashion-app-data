@@ -12,7 +12,6 @@ gem 'sidekiq'
 gem 'sidekiq-failures'
 gem 'sinatra', '>= 2.0.0.beta2', require: false
 gem 'watir'
-gem 'phantomjs'
 
 group :development, :test do
   gem 'binding_of_caller'
