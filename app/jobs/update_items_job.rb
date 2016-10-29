@@ -45,7 +45,7 @@ class UpdateItemsJob < ApplicationJob
     # Get the item url
     item.product_url = browser.url
     # Capture a screenshot of the item page
-    browser.screenshot.save("product_photos/#{item.brand}_#{item.sku}_#{item.product_code}")
+    # browser.screenshot.save("product_photos/#{item.brand}_#{item.sku}_#{item.product_code}")
     # Close the Watir browser
     browser.close
     # Save the item
