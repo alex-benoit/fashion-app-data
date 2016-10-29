@@ -9,6 +9,7 @@ class UpdateItemsJob < ApplicationJob
     # Selenium::WebDriver::PhantomJS.path = 'bin/phantomjs'
     browser = Watir::Browser.new(:phantomjs)
     browser.goto("http://www.asos.com/prd/#{item.sku}")
+    sleep 10
     # Get the item name
     item.full_name = browser.div(class: 'product-hero').h1.text if browser.div(class: 'product-hero').h1.present?
     #  Get the item brand
