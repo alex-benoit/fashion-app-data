@@ -5,7 +5,7 @@ tmp/*
 *.swp
 .DS_Store
 public/assets
-product_photos
+product_photos/*.png
 
 # Ignore application configuration
 /config/application.yml
