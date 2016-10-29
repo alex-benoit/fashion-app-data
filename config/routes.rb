@@ -5,10 +5,9 @@ Rails.application.routes.draw do
   root to: 'pages#home'
 
   # Sidekiq Web UI, only for admins.
-  # require 'sidekiq/web'
-  # authenticate :user, lambda { |u| u.admin } do
-  #   mount Sidekiq::Web => '/sidekiq'
-  # end
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
+
 
   # API
   namespace :api, defaults: { format: :json } do

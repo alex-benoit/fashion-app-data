@@ -4,6 +4,7 @@ class CreateItems < ActiveRecord::Migration[5.0]
       t.string :full_name
       t.string :brand
       t.integer :sku
+      t.string :category_1
       t.integer :product_code
       t.boolean :in_stock
       t.text :details
@@ -12,7 +13,8 @@ class CreateItems < ActiveRecord::Migration[5.0]
       t.float :price
       t.string :washing_instructions
       t.string :materials
-      t.text :photos
+      t.text :photo_urls
+      t.string :product_url
 
       t.timestamps
     end

@@ -4,23 +4,13 @@ ruby '2.3.1'
 gem 'rails'
 gem 'puma'
 gem 'pg'
-gem 'figaro'
+# gem 'figaro'
 gem 'jbuilder'
-gem 'devise'
 gem 'redis'
 
-gem 'sass-rails'
-gem 'jquery-rails'
-gem 'uglifier'
-gem 'bootstrap-sass'
-gem 'font-awesome-sass'
-gem 'simple_form'
-gem 'autoprefixer-rails'
-
-gem 'pundit'
 gem 'sidekiq'
 gem 'sidekiq-failures'
-# gem 'sinatra', '>= 2.0.0.beta2', require: false # For sideqik web dashboard
+gem 'sinatra', '>= 2.0.0.beta2', require: false
 gem 'watir'
 
 group :development, :test do

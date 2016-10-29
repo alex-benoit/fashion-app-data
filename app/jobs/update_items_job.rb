@@ -2,49 +2,59 @@ class UpdateItemsJob < ApplicationJob
   queue_as :default
 
   def perform(item_id)
+    # Find the item in db
     item = Item.find(item_id)
-    puts "Updating info for item SKU: #{item.sku}..."
-
+    puts "Updating item info with ID: #{item.id} and SKU: #{item.sku} ..."
+    # Start Watir Browser with Phantom JS (headless browser)
     browser = Watir::Browser.new(:phantomjs)
     browser.goto("http://www.asos.com/prd/#{item.sku}")
-
-    new_name = browser.div(class: 'product-hero').h1.text
-    item.full_name = new_name unless new_name.empty?
-
-    new_brand = browser.div(class: 'brand-description').strong.text
-    item.brand = new_brand unless new_brand.empty?
-
-    new_product_code = browser.div(class: 'product-code').p.text
-    item.product_code = new_product_code unless new_product_code.empty?
-
-    new_in_stock = browser.div(class: 'out-of-stock').text
-    item.in_stock = new_in_stock.empty?
-
+    # Get the item name
+    item.full_name = browser.div(class: 'product-hero').h1.text if browser.div(class: 'product-hero').h1.present?
+    #  Get the item brand
+    item.brand = browser.div(class: 'brand-description').strong.text if browser.div(class: 'brand-description').strong.present?
+    # Get the item category
+    item.category_1 = browser.div(class: 'product-description').strong.text if browser.div(class: 'product-description').strong.present?
+    # Get the item product code
+    item.product_code = browser.div(class: 'product-code').p.text if browser.div(class: 'product-code').present?
+    # Check if the item is in stock/is continued
+    item.in_stock = browser.div(class: 'out-of-stock').text.empty? if browser.div(class: 'out-of-stock').present?
+    # Get the item details
     new_details = []
-    browser.div(class: 'product-description').ul.when_present.lis.each { |i| new_details.push(i.text) unless i.text.empty? }
-    item.details = new_details unless new_details.empty?
-
+    browser.div(class: 'product-description').ul.lis.each { |i| new_details.push(i.text) unless i.text.empty? } if browser.div(class: 'product-description').ul.present?
+    item.details = new_details
+    # Get the item sizes with marked if size is not available
     new_sizes = []
-    browser.div(class: 'size-section').select.when_present.options.each { |o| new_sizes.push(o.text) }
-    new_sizes.delete_at(0) if new_sizes[0] == 'Please select'
-    item.sizes = new_sizes unless new_sizes.empty?
-
-    new_color = browser.span(class: 'product-colour').text
-    item.color = new_color unless new_color.empty?
-
-    new_price = browser.span(class: 'current-price').text
-    item.price = new_price.delete('£').to_f unless new_price.empty?
-
-    new_washing_instructions = browser.div(class: 'care-info').p.text
-    item.washing_instructions = new_washing_instructions unless new_washing_instructions.empty?
-
-    new_materials = browser.div(class: 'about-me').p.text
-    item.materials = new_materials unless new_materials.empty?
-
+    browser.div(class: 'size-section').select.options.each { |o| new_sizes.push(o.text) unless o.text == 'Please select'} if browser.div(class: 'size-section').select.present?
+    item.sizes = new_sizes
+    # Get the item color
+    item.color = browser.span(class: 'product-colour').text if browser.span(class: 'product-colour').present?
+    # Get the item price
+    item.price = browser.span(class: 'current-price').text.delete('£').to_f if browser.span(class: 'current-price').present?
+    # Get the item washing instuctions
+    item.washing_instructions = browser.div(class: 'care-info').p.text if browser.div(class: 'care-info').p.present?
+    # Get the item materials
+    item.materials = browser.div(class: 'about-me').p.text if browser.div(class: 'about-me').p.present?
+    # Get the item list of photos
+    new_photos = []
+    if browser.div(class: 'product-gallery').div(class: 'thumbnails').ul.present?
+      browser.div(class: 'product-gallery').div(class: 'thumbnails').ul.lis(class: 'image-thumbnail').each do |photo|
+        new_photos.push(photo.a.img.src.split("?")[0])
+      end
+    end
+    item.photo_urls = new_photos
+    # Get the item url
+    item.product_url = browser.url
+    # Capture a screenshot of the item page
     browser.screenshot.save("product_photos/#{item.brand}_#{item.sku}_#{item.product_code}")
-
-    item.save!
-
+    # Close the Watir browser
     browser.close
+    # Save the item
+    item.save!
+    puts "Done for item with ID: #{item.id} and SKU: #{item.sku} !"
+
+  rescue Watir::Exception::UnknownObjectException => e
+    puts "*** ! Error scraping on item: id: #{item.id}, sku: #{item.sku}, error: #{e} ! ***"
+    item.save!
+    puts '*** ! Emegency save - Item is incomplete ! ***'
   end
 end
