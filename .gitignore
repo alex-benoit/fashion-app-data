@@ -1,3 +1,4 @@
+product_photos/*
 .bundle
 log/*.log
 tmp/**/*
@@ -5,7 +6,6 @@ tmp/*
 *.swp
 .DS_Store
 public/assets
-product_photos
 
 # Ignore application configuration
 /config/application.yml
