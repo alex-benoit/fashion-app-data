@@ -6,6 +6,7 @@ class UpdateItemsJob < ApplicationJob
     item = Item.find(item_id)
     puts "Updating item info with ID: #{item.id} and SKU: #{item.sku} ..."
     # Start Watir Browser with Phantom JS (headless browser)
+    # Selenium::WebDriver::PhantomJS.path = 'bin/phantomjs'
     browser = Watir::Browser.new(:phantomjs)
     browser.goto("http://www.asos.com/prd/#{item.sku}")
     # Get the item name
