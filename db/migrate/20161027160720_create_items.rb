@@ -12,6 +12,7 @@ class CreateItems < ActiveRecord::Migration[5.0]
       t.float :price
       t.string :washing_instructions
       t.string :materials
+      t.text :photos
 
       t.timestamps
     end
