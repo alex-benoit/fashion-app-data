@@ -21,10 +21,6 @@ gem 'pundit'
 gem 'sidekiq'
 gem 'sidekiq-failures'
 # gem 'sinatra', '>= 2.0.0.beta2', require: false # For sideqik web dashboard
-# gem 'curb' # dont need it anymore
-# gem 'watir-rails'
-# gem 'phantomjs'
-# gem 'selenium-webdriver'
 gem 'watir'
 
 group :development, :test do
