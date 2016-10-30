@@ -39,7 +39,7 @@ class UpdateItemsJob < ApplicationJob
     new_photos = []
     if browser.div(class: 'product-gallery').div(class: 'thumbnails').ul.present?
       browser.div(class: 'product-gallery').div(class: 'thumbnails').ul.lis(class: 'image-thumbnail').each do |photo|
-        new_photos.push(photo.a.img.src.split("?")[0])
+        new_photos.push(photo.a.img.src.split('?')[0])
       end
     end
     item.photo_urls = new_photos
